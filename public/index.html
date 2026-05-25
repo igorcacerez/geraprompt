@@ -194,16 +194,43 @@
   <!-- ─── Header ─────────────────────────────────────────── -->
   <header class="header" role="banner">
     <div class="header-inner">
-      <a href="/" class="logo" title="Gerador de Prompt — Página inicial" aria-label="Gerador de Prompt — Ir para a página inicial">
-        <img src="/favicon.svg" alt="Ícone Gerador de Prompt" class="logo-img" width="28" height="28" loading="eager" />
-        <span class="logo-text">Gerador de Prompt</span>
-      </a>
-      <p class="header-tagline">Prompts profissionais para qualquer modelo de IA</p>
+      <div class="header-left">
+        <button id="btn-toggle-sidebar" class="btn-toggle-history" type="button" aria-label="Abrir histórico" aria-expanded="true" title="Histórico de conversas">
+          <span class="toggle-icon" aria-hidden="true">☰</span>
+        </button>
+        <a href="/" class="logo" title="Gerador de Prompt — Página inicial" aria-label="Gerador de Prompt">
+          <img src="/favicon.svg" alt="Ícone Gerador de Prompt" class="logo-img" width="28" height="28" loading="eager" />
+          <span class="logo-text">Gerador de Prompt</span>
+        </a>
+      </div>
+      <span class="session-title" id="session-title" aria-live="polite"></span>
+      <p class="header-tagline">Prompts profissionais para qualquer IA</p>
     </div>
   </header>
 
   <!-- ─── Layout Principal ────────────────────────────────── -->
   <main class="main-layout" role="main" id="main-content">
+
+    <!-- ─── Sidebar de Histórico (esquerda) ───────────────────── -->
+    <nav id="history-nav" class="history-nav" aria-label="Histórico de conversas">
+      <div class="history-nav-inner">
+        <!-- Botão Novo Contexto -->
+        <button id="btn-new-session" class="btn-new-session" type="button" aria-label="Iniciar nova conversa">
+          <span class="new-session-icon" aria-hidden="true">✏️</span>
+          <span class="new-session-text">Nova Conversa</span>
+        </button>
+
+        <!-- Lista de histórico -->
+        <div id="history-list" class="history-list" role="list" aria-label="Lista de conversas anteriores">
+          <!-- Preenchida por JavaScript -->
+        </div>
+
+        <!-- Rodapé da sidebar -->
+        <div class="history-footer">
+          <span class="history-footer-text">Histórico salvo localmente</span>
+        </div>
+      </div>
+    </nav>
 
     <!-- Sidebar de Configurações -->
     <aside class="sidebar" aria-label="Configurações do gerador de prompt">
