@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gerador de Prompt — Crie prompts profissionais e otimizados para qualquer modelo de IA com engenharia de prompt avançada." />
+  <meta name="keywords" content="gerador de prompt, engenharia de prompt, IA, GPT, Gemini, Claude, prompt profissional" />
+  <meta property="og:title" content="Gerador de Prompt" />
+  <meta property="og:description" content="Transforme suas ideias em prompts profissionais para qualquer modelo de IA." />
+  <title>Gerador de Prompt — Prompts Profissionais com IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ─── Header ─────────────────────────────────────────── -->
+  <header class="header" role="banner">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon" aria-hidden="true">⚡</span>
+        <span class="logo-text">Gerador de Prompt</span>
+      </div>
+      <p class="header-tagline">Prompts profissionais para qualquer modelo de IA</p>
+    </div>
+  </header>
+
+  <!-- ─── Layout Principal ────────────────────────────────── -->
+  <main class="main-layout" role="main">
+
+    <!-- Sidebar de Configurações -->
+    <aside class="sidebar" aria-label="Configurações">
+      <div class="sidebar-inner">
+        <h2 class="sidebar-title">
+          <span class="sidebar-title-icon" aria-hidden="true">⚙️</span>
+          Configurações
+        </h2>
+
+        <!-- Modelo de IA -->
+        <div class="form-group">
+          <label class="form-label" for="modelo-select">
+            <span class="label-icon" aria-hidden="true">🤖</span>
+            Modelo de IA
+          </label>
+          <div class="select-wrapper">
+            <select id="modelo-select" class="form-select" aria-label="Selecione o modelo de IA">
+              <option value="" disabled selected>Selecione um modelo...</option>
+              <optgroup label="Texto & Raciocínio">
+                <option value="GPT">GPT (OpenAI)</option>
+                <option value="Gemini">Gemini (Google)</option>
+                <option value="Claude">Claude (Anthropic)</option>
+                <option value="Codex">Codex (OpenAI)</option>
+                <option value="Nano Banana">Nano Banana</option>
+              </optgroup>
+              <optgroup label="Imagem">
+                <option value="DALL-E">DALL-E (OpenAI)</option>
+                <option value="Midjourney">Midjourney</option>
+                <option value="Stable Diffusion">Stable Diffusion</option>
+                <option value="Leonardo AI">Leonardo AI</option>
+              </optgroup>
+              <optgroup label="Vídeo">
+                <option value="Runway">Runway</option>
+                <option value="Sora">Sora (OpenAI)</option>
+                <option value="Veo">Veo (Google)</option>
+                <option value="Kling">Kling</option>
+              </optgroup>
+              <optgroup label="Outros">
+                <option value="Outro">Outro modelo</option>
+              </optgroup>
+            </select>
+            <span class="select-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+
+        <!-- Tipo de Saída -->
+        <div class="form-group">
+          <label class="form-label" for="saida-select">
+            <span class="label-icon" aria-hidden="true">🎯</span>
+            Tipo de Saída
+          </label>
+          <div class="select-wrapper">
+            <select id="saida-select" class="form-select" aria-label="Selecione o tipo de saída esperada">
+              <option value="" disabled selected>Selecione o tipo...</option>
+              <optgroup label="Conteúdo">
+                <option value="Texto">Texto</option>
+                <option value="Documento">Documento</option>
+                <option value="E-mail">E-mail</option>
+                <option value="Post para Redes Sociais">Post para Redes Sociais</option>
+                <option value="Apresentação">Apresentação</option>
+              </optgroup>
+              <optgroup label="Criativo">
+                <option value="Imagem">Imagem</option>
+                <option value="Vídeo">Vídeo</option>
+                <option value="Áudio">Áudio</option>
+              </optgroup>
+              <optgroup label="Técnico">
+                <option value="Código">Código</option>
+                <option value="Planilha">Planilha</option>
+                <option value="Análise de Dados">Análise de Dados</option>
+                <option value="Prompt para Agente de IA">Prompt para Agente de IA</option>
+                <option value="Automação">Automação</option>
+              </optgroup>
+              <optgroup label="Educacional">
+                <option value="Aula">Aula</option>
+                <option value="Atividade Escolar">Atividade Escolar</option>
+              </optgroup>
+            </select>
+            <span class="select-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+
+        <!-- Nível de Detalhamento -->
+        <div class="form-group">
+          <label class="form-label" for="nivel-select">
+            <span class="label-icon" aria-hidden="true">📊</span>
+            Nível de Detalhamento
+          </label>
+          <div class="select-wrapper">
+            <select id="nivel-select" class="form-select" aria-label="Selecione o nível de detalhamento">
+              <option value="Simples">Simples</option>
+              <option value="Médio">Médio</option>
+              <option value="Avançado" selected>Avançado</option>
+              <option value="Profissional">Profissional</option>
+              <option value="Ultra detalhado">Ultra detalhado</option>
+            </select>
+            <span class="select-arrow" aria-hidden="true">▾</span>
+          </div>
+          <!-- Indicador visual do nível -->
+          <div class="level-indicator" id="level-indicator" aria-hidden="true">
+            <div class="level-bar">
+              <div class="level-fill" id="level-fill"></div>
+            </div>
+            <span class="level-label" id="level-label">Avançado</span>
+          </div>
+        </div>
+
+        <!-- Idioma -->
+        <div class="form-group">
+          <label class="form-label" for="idioma-select">
+            <span class="label-icon" aria-hidden="true">🌐</span>
+            Idioma do Prompt
+          </label>
+          <div class="select-wrapper">
+            <select id="idioma-select" class="form-select" aria-label="Selecione o idioma do prompt gerado">
+              <option value="Português do Brasil" selected>🇧🇷 Português do Brasil</option>
+              <option value="Inglês">🇺🇸 Inglês</option>
+              <option value="Espanhol">🇪🇸 Espanhol</option>
+            </select>
+            <span class="select-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+
+        <!-- Dica de uso -->
+        <div class="sidebar-tip" role="note" aria-label="Dica de uso">
+          <span class="tip-icon" aria-hidden="true">💡</span>
+          <p class="tip-text">Quanto mais detalhes você descrever, melhor será o prompt gerado!</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Área principal de chat -->
+    <section class="chat-area" aria-label="Área de geração de prompt">
+
+      <!-- Área de boas-vindas / histórico -->
+      <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Histórico de prompts gerados">
+        <div class="welcome-screen" id="welcome-screen">
+          <div class="welcome-icon" aria-hidden="true">⚡</div>
+          <h1 class="welcome-title">Gerador de Prompt</h1>
+          <p class="welcome-subtitle">Transforme suas ideias em prompts profissionais para qualquer modelo de IA</p>
+          <div class="welcome-features" role="list">
+            <div class="feature-chip" role="listitem">
+              <span aria-hidden="true">🎯</span> Engenharia de Prompt
+            </div>
+            <div class="feature-chip" role="listitem">
+              <span aria-hidden="true">🤖</span> 14+ Modelos de IA
+            </div>
+            <div class="feature-chip" role="listitem">
+              <span aria-hidden="true">⚡</span> Resposta Instantânea
+            </div>
+            <div class="feature-chip" role="listitem">
+              <span aria-hidden="true">🌐</span> 3 Idiomas
+            </div>
+          </div>
+          <p class="welcome-hint">Configure os parâmetros ao lado e descreva o que você precisa abaixo.</p>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-container" role="form" aria-label="Formulário de geração de prompt">
+          <div class="textarea-wrapper">
+            <textarea
+              id="user-message"
+              class="user-input"
+              placeholder="Descreva o que você precisa... Ex: Quero criar uma imagem de uma calopsita programadora em estilo 3D realista para usar no TikTok."
+              rows="1"
+              maxlength="2000"
+              aria-label="Descreva sua solicitação"
+              aria-describedby="char-counter"
+            ></textarea>
+            <div class="input-footer">
+              <span class="char-counter" id="char-counter" aria-live="polite">
+                <span id="char-count">0</span>/2000
+              </span>
+              <div class="input-actions">
+                <button id="btn-clear" class="btn-icon" title="Limpar tudo" aria-label="Limpar todos os campos">
+                  🗑️
+                </button>
+                <button id="btn-generate" class="btn-primary" aria-label="Gerar prompt profissional">
+                  <span class="btn-text">Gerar Prompt</span>
+                  <span class="btn-icon-right" aria-hidden="true">⚡</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─── Toast de notificação ────────────────────────────── -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ─── Modal de validação ──────────────────────────────── -->
+  <div id="validation-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-box">
+      <span class="modal-icon" aria-hidden="true">⚠️</span>
+      <h3 id="modal-title" class="modal-title">Atenção</h3>
+      <p id="modal-message" class="modal-message"></p>
+      <button id="modal-close" class="btn-primary" aria-label="Fechar aviso">Entendido</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
