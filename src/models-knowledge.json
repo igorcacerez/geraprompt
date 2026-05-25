@@ -1,0 +1,688 @@
+{
+  "_meta": {
+    "versao": "2.0.0",
+    "atualizado": "2026-05-25",
+    "descricao": "Base de conhecimento sobre modelos de IA e melhores práticas para engenharia de prompt. Compilada a partir de documentação oficial, guias especializados e pesquisas de 2024-2026.",
+    "fontes": [
+      "Anthropic Prompt Engineering Guide",
+      "OpenAI Cookbook & Best Practices",
+      "Google Gemini Prompt Design Guide",
+      "Midjourney v6 Official Documentation",
+      "Stability AI SDXL Guide",
+      "Veo3 Google DeepMind Documentation",
+      "Runway Gen-4 Official Guide",
+      "Kling AI Prompting Guide",
+      "Sora OpenAI Documentation",
+      "Leonardo AI Community Guide"
+    ]
+  },
+  "modelos": {
+    "GPT": {
+      "nome_completo": "GPT-4 / GPT-4o / ChatGPT (OpenAI)",
+      "categoria": "texto_raciocinio",
+      "descricao": "Modelo de linguagem grande da OpenAI. Excelente para raciocínio complexo, texto, código, análise, planejamento e conversação estruturada.",
+      "pontos_fortes": [
+        "Raciocínio lógico e matemático",
+        "Seguir instruções complexas e multi-etapas",
+        "Geração de código em múltiplas linguagens",
+        "Análise e síntese de documentos longos",
+        "Geração de conteúdo criativo estruturado",
+        "Resposta em formatos específicos (JSON, XML, Markdown)"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["role_persona", "objetivo", "contexto", "instrucoes", "restricoes", "formato_saida", "exemplos"],
+        "tecnicas_avancadas": [
+          "Chain of Thought (CoT): peça para 'pensar passo a passo'",
+          "Recursive Self-Improvement: gerar, criticar e melhorar",
+          "Few-shot: forneça 2-5 exemplos de entrada/saída",
+          "Delimitadores: use ###, \"\"\" ou <tags> para separar seções",
+          "Multi-Perspective Simulation: simule debate entre especialistas"
+        ],
+        "secoes": {
+          "role_persona": "Defina um papel específico e sênior (ex: 'Você é um arquiteto de software sênior com 15 anos de experiência...')",
+          "objetivo": "Declare o objetivo final claro e mensurável",
+          "contexto": "Forneça background, público-alvo e restrições relevantes",
+          "instrucoes": "Liste as etapas numeradas da tarefa de forma específica",
+          "restricoes": "Explicite o que NÃO deve ser feito (negative prompting)",
+          "formato_saida": "Especifique o formato exato: JSON, Markdown, tabela, lista, etc.",
+          "exemplos": "Inclua 2-5 exemplos de alta qualidade de entrada→saída"
+        }
+      },
+      "boas_praticas": [
+        "Use verbos de ação precisos: 'analise', 'transforme', 'extraia', 'sintetize'",
+        "Coloque instruções no INÍCIO e no FIM de prompts longos",
+        "Seja ridiculamente específico — evite termos vagos",
+        "Force saída estruturada com esquema JSON quando precisar parsear",
+        "Para tarefas complexas, decomponha em 3-5 subtarefas menores",
+        "Peça ao modelo para 'planejar antes de agir'",
+        "Use delimitadores para separar instruções do conteúdo"
+      ],
+      "exemplo_estrutura": "## PAPEL\nVocê é [persona específica].\n\n## OBJETIVO\n[O que 'feito' significa]\n\n## CONTEXTO\n[Background, público, situação]\n\n## TAREFA\n1. [Passo 1]\n2. [Passo 2]\n\n## RESTRIÇÕES\n- Não [X]\n- Evite [Y]\n\n## FORMATO DE SAÍDA\n[Especificação exata]\n\n## EXEMPLO\nEntrada: [X] → Saída: [Y]"
+    },
+    "Gemini": {
+      "nome_completo": "Gemini 2.0 / Gemini Pro / Gemini Flash (Google)",
+      "categoria": "texto_raciocinio",
+      "descricao": "Modelo multimodal do Google. Excelente com contexto muito longo (até 1M tokens), análise de imagens, vídeos, documentos e integração com serviços Google.",
+      "pontos_fortes": [
+        "Janela de contexto massiva (1M tokens)",
+        "Análise multimodal: texto + imagem + vídeo + áudio",
+        "Integração nativa com Google Workspace",
+        "Raciocínio sobre documentos longos",
+        "Tarefas de análise de dados e código",
+        "Geração de conteúdo multilíngue"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["role_persona", "objetivo", "instrucoes", "dados_contexto", "exemplos", "formato_saida"],
+        "tecnicas_especificas": [
+          "Use tags XML para estruturar seções: <contexto>, <tarefa>, <instrucoes>",
+          "Para documentos longos: coloque os dados ANTES das instruções",
+          "Use 'Com base nas informações acima...' para ancorar o raciocínio",
+          "Few-shot: exemplos de entrada/saída são altamente eficazes",
+          "Referencie modalidades específicas: 'No gráfico acima...', 'Na imagem fornecida...'"
+        ],
+        "secoes": {
+          "role_persona": "Defina quem o modelo é (1-3 frases)",
+          "objetivo": "Qual é a tarefa principal",
+          "dados_contexto": "Coloque documentos/dados antes das instruções em prompts longos",
+          "instrucoes": "Instruções passo a passo com <tags> para separar seções",
+          "exemplos": "Pares de entrada/saída consistentes na estrutura",
+          "formato_saida": "Esquema preciso do formato esperado (JSON, Markdown, tabela)"
+        }
+      },
+      "boas_praticas": [
+        "Seja direto e conciso — Gemini é treinado para respostas eficientes",
+        "Use XML-style tags para separar seções do prompt",
+        "Para múltiplas modalidades, referencie explicitamente cada uma",
+        "Coloque dados longos no início, instruções no final",
+        "Controle a verbosidade: peça 'resposta detalhada' se necessário",
+        "Use few-shot examples para formato e estilo de raciocínio"
+      ],
+      "exemplo_estrutura": "<role>Você é [papel específico]</role>\n\n<objetivo>[O que deve ser alcançado]</objetivo>\n\n<contexto>[Dados, documentos ou background]</contexto>\n\n<instrucoes>\n1. [Passo 1]\n2. [Passo 2]\n</instrucoes>\n\n<formato_saida>[Esquema da resposta]</formato_saida>"
+    },
+    "Claude": {
+      "nome_completo": "Claude 3.5 / Claude 3 Opus / Claude Sonnet (Anthropic)",
+      "categoria": "texto_raciocinio",
+      "descricao": "Modelo da Anthropic com foco em segurança, qualidade textual e análise aprofundada. Excelente para escrita, análise, desenvolvimento e contexto muito longo.",
+      "pontos_fortes": [
+        "Qualidade textual e narrativa superior",
+        "Análise aprofundada e raciocínio nuançado",
+        "Janela de contexto longa (200K tokens)",
+        "Seguir instruções com regras complexas",
+        "Escrita criativa e técnica de alta qualidade",
+        "Análise de código e desenvolvimento"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["role", "goal", "context", "constraints", "task", "output_format", "uncertainty_rule", "examples"],
+        "tecnicas_especificas": [
+          "XML tags são nativamente reconhecidas pelo Claude: <role>, <goal>, <constraints>, <output_format>",
+          "Trate o system prompt como um 'contrato' vinculante",
+          "Para contexto longo: coloque documentos no INÍCIO, instruções depois",
+          "Memory & Skills: use CLAUDE.md para preferências persistentes",
+          "Think First: instrua a 'pensar passo a passo antes de executar'",
+          "Atomic Tasks: divida tarefas complexas em prompts sequenciais",
+          "Verifiable Output: peça para citar trechos antes de concluir"
+        ],
+        "secoes": {
+          "role": "Definição de identidade em 1-3 frases usando <role>",
+          "goal": "Definição de 'sucesso' usando <goal>",
+          "constraints": "Regras testáveis em bullet points usando <constraints>",
+          "output_format": "Esquema exato usando <output_format>",
+          "uncertainty_rule": "'Se não tiver certeza, diga e faça perguntas'",
+          "examples": "2-5 exemplos 'de ouro' do resultado esperado"
+        }
+      },
+      "boas_praticas": [
+        "Use XML tags para estruturar — Claude é especificamente treinado para isso",
+        "Restrições devem ser testáveis (Verdadeiro/Falso)",
+        "Inclua regra de incerteza: 'Se não tiver certeza, pergunte'",
+        "Coloque contexto longo ANTES das instruções",
+        "Use formato 'contrato': role, goal, constraints, format",
+        "Para análise: peça para 'citar partes relevantes primeiro'",
+        "Tarefas muito complexas: divida em 2-3 prompts sequenciais"
+      ],
+      "exemplo_estrutura": "<role>[Persona específica e sênior]</role>\n\n<goal>[Definição de sucesso]</goal>\n\n<contexto>[Background relevante]</contexto>\n\n<constraints>\n- Nunca [X]\n- Sempre [Y]\n- Evite [Z]\n</constraints>\n\n<task>[Tarefa detalhada]</task>\n\n<output_format>[Esquema exato da resposta]</output_format>\n\n<uncertainty_rule>Se não tiver certeza sobre algo, diga explicitamente e faça perguntas de esclarecimento.</uncertainty_rule>"
+    },
+    "Codex": {
+      "nome_completo": "Codex / GPT-4o para código (OpenAI)",
+      "categoria": "codigo",
+      "descricao": "Modelo especializado em geração e análise de código. Ideal para criar sistemas completos, APIs, aplicações e scripts de automação.",
+      "pontos_fortes": [
+        "Geração de código em 70+ linguagens",
+        "Arquitetura de sistemas completos",
+        "Debug e refatoração de código",
+        "Documentação técnica",
+        "Testes automatizados",
+        "Scripts de DevOps e automação"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["role", "stack_tecnologica", "funcionalidades", "arquitetura", "banco_dados", "apis_rotas", "seguranca", "qualidade", "deploy", "readme"],
+        "elementos_obrigatorios": [
+          "Role: desenvolvedor/arquiteto específico",
+          "Stack tecnológica completa (linguagens, frameworks, versões)",
+          "Funcionalidades detalhadas (user stories ou lista)",
+          "Arquitetura (monolito, microserviços, etc.)",
+          "Modelo de dados (entidades, relacionamentos)",
+          "APIs e endpoints (método, rota, payload)",
+          "Regras de negócio específicas",
+          "Segurança (autenticação, autorização, validação)",
+          "Padrões de código (ESLint, tipagem, comentários)",
+          "Deploy e configuração (Docker, CI/CD, env vars)",
+          "README e documentação"
+        ]
+      },
+      "boas_praticas": [
+        "Especifique versões exatas das dependências quando crítico",
+        "Defina o padrão de código esperado (clean code, SOLID, DRY)",
+        "Peça tratamento de erros explícito em cada módulo",
+        "Inclua validação de inputs e sanitização",
+        "Solicite testes unitários e de integração",
+        "Defina variáveis de ambiente necessárias",
+        "Peça para gerar um README.md completo"
+      ],
+      "exemplo_estrutura": "## PAPEL\nVocê é um engenheiro de software sênior especialista em [stack].\n\n## STACK\n- Backend: [tecnologia + versão]\n- Frontend: [tecnologia + versão]\n- Banco: [tecnologia]\n- Deploy: [plataforma]\n\n## FUNCIONALIDADES\n1. [Feature 1]\n2. [Feature 2]\n\n## ARQUITETURA\n[Diagrama ou descrição]\n\n## BANCO DE DADOS\n[Entidades e relacionamentos]\n\n## REGRAS DE NEGÓCIO\n[Regras específicas]\n\n## SEGURANÇA\n[Autenticação, validação, etc.]\n\n## PADRÕES\n[Clean code, tipagem, etc.]\n\n## ENTREGÁVEIS\n- Código completo e funcional\n- README.md\n- .env.example\n- Testes"
+    },
+    "Nano Banana": {
+      "nome_completo": "Nano Banana (Modelo de Geração de Imagem)",
+      "categoria": "imagem",
+      "descricao": "Modelo especializado em geração de imagens com foco em detalhamento extremo, realismo e qualidade visual. Suporta prompts altamente descritivos com parâmetros técnicos de fotografia e arte.",
+      "pontos_fortes": [
+        "Geração de imagens ultra-detalhadas",
+        "Realismo fotográfico",
+        "Personagens e retratos de alta qualidade",
+        "Cenários complexos com múltiplos elementos",
+        "Estilos artísticos variados",
+        "Controle técnico de iluminação e composição"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito_principal", "aparencia_detalhes", "estilo_visual", "cenario_ambiente", "iluminacao", "composicao_camera", "texturas_materiais", "paleta_cores", "qualidade_tecnica", "proporcao", "elementos_negativos"],
+        "elementos_visuais_obrigatorios": {
+          "sujeito_principal": "Descrição extremamente detalhada do personagem/objeto: aparência física, expressão, roupa, acessórios, postura",
+          "estilo_visual": "3D realista, fotorrealista, cartoon 3D, anime 3D, pintura digital, concept art, etc.",
+          "cenario_ambiente": "Localização, época, tempo, elementos de fundo, profundidade",
+          "iluminacao": "Tipo (natural, estúdio, dramática, neon, golden hour, rim light), direção, temperatura de cor",
+          "composicao_camera": "Enquadramento (close-up, médio, plano geral), ângulo (frontal, baixo, alto, perspectiva), profundidade de campo",
+          "texturas_materiais": "Pele, tecido, superfícies, reflexos, brilhos",
+          "paleta_cores": "Cores dominantes, harmonia cromática, saturação",
+          "qualidade_tecnica": "4K, 8K, ultra-detailed, hyperrealistic, ray-tracing",
+          "proporcao": "16:9, 1:1, 9:16, 4:5",
+          "elementos_negativos": "O que NÃO deve aparecer: deformações, qualidade baixa, elementos indesejados"
+        }
+      },
+      "boas_praticas": [
+        "Seja EXTREMAMENTE específico na descrição do sujeito principal",
+        "Use termos técnicos de fotografia e iluminação",
+        "Especifique estilo 3D claramente (realista vs. cartoon vs. anime)",
+        "Descreva a textura de cada material presente",
+        "Use referências de estilo artístico quando relevante",
+        "Inclua elementos negativos para evitar artefatos comuns",
+        "Especifique a proporção conforme o uso final da imagem"
+      ],
+      "exemplo_estrutura": "[Descrição do sujeito extremamente detalhada], [expressão facial], [vestuário com detalhes], [postura e ação], [estilo visual: 3D realista/fotorrealista/etc.], [cenário e ambiente detalhado], [iluminação específica: tipo, direção, cor], [enquadramento e câmera], [texturas e materiais], [paleta de cores], [qualidade: 8K ultra-detailed, hyperrealistic], [proporção: 1:1/9:16/16:9]. Negative: [elementos indesejados]"
+    },
+    "DALL-E": {
+      "nome_completo": "DALL-E 3 (OpenAI)",
+      "categoria": "imagem",
+      "descricao": "Modelo de geração de imagens da OpenAI. Integrado ao ChatGPT e à API da OpenAI. Excelente em seguir instruções descritivas complexas em linguagem natural.",
+      "pontos_fortes": [
+        "Entende linguagem natural complexa e narrativa",
+        "Renderização de texto em imagens",
+        "Combinação criativa de conceitos",
+        "Estilos artísticos diversificados",
+        "Composições complexas com múltiplos elementos",
+        "Integração nativa com ChatGPT para refinamento"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito_acao", "cenario", "estilo_medio", "humor_atmosfera", "composicao_iluminacao", "detalhes_adicionais"],
+        "diferencial_chave": "DALL-E 3 usa linguagem natural conversacional, NÃO keyword salad. Escreva como estaria descrevendo para um artista humano.",
+        "elementos_prompt": {
+          "sujeito_acao": "Quem ou o quê é o foco principal e o que está fazendo",
+          "cenario": "Ambiente, localização, hora do dia, condições climáticas",
+          "estilo_medio": "Fotorrealista, aquarela, óleo, cyberpunk, illustration, anime, etc.",
+          "humor_atmosfera": "Tom emocional: sereno, dramático, místico, vibrante, melancólico",
+          "composicao_iluminacao": "Perspectiva (close-up, vista aérea), iluminação (golden hour, neon, estúdio)",
+          "texto_na_imagem": "Use aspas para texto exato: a placa escrita \"Bem-vindo\""
+        }
+      },
+      "boas_praticas": [
+        "Escreva como estaria descrevendo para um artista humano — narrativo, não lista",
+        "Para texto na imagem: use aspas e seja muito específico sobre posição",
+        "Evite sobrecarregar: não inclua elementos contraditórios",
+        "Se precisar de exatidão: adicione 'Use o seguinte prompt exatamente sem adicionar detalhes'",
+        "Combine conceitos distintos de forma criativa",
+        "Itere: ajuste um elemento por vez para refinar",
+        "Use persona: 'Como um artista conceitual profissional, crie...'"
+      ],
+      "exemplo_estrutura": "Uma imagem [fotorrealista/ilustração/etc.] de [sujeito detalhado], [ação ou estado], em [cenário específico]. O estilo deve ser [referência artística]. A iluminação é [tipo e qualidade da luz], criando [atmosfera/humor]. A composição usa [perspectiva/enquadramento]. [Detalhes adicionais importantes]."
+    },
+    "Midjourney": {
+      "nome_completo": "Midjourney v6 / v6.1",
+      "categoria": "imagem",
+      "descricao": "Plataforma de geração de imagens conhecida por sua qualidade artística excepcional e estética coesa. Responde melhor a linguagem natural evocativa combinada com parâmetros técnicos.",
+      "pontos_fortes": [
+        "Qualidade artística e estética premium",
+        "Fotorrealismo cinematográfico",
+        "Coerência visual e composição",
+        "Ampla gama de estilos artísticos",
+        "Referências de personagens e estilos (--cref, --sref)",
+        "Controle preciso com parâmetros"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito", "acao_cenario", "estilo_estetica", "iluminacao_cor", "parametros_tecnicos"],
+        "anatomia_prompt": {
+          "sujeito": "O foco principal com detalhes específicos e evocativos",
+          "acao_cenario": "O que está acontecendo e onde (específico, não vago)",
+          "estilo_estetica": "Referência artística: '35mm photography', 'oil painting', 'Unreal Engine 5', 'minimalist vector'",
+          "iluminacao_cor": "Detalhes atmosféricos: 'cinematic lighting', 'golden hour', 'muted pastel palette'",
+          "parametros_tecnicos": "Sempre no final: --ar --stylize --chaos --style --no"
+        },
+        "parametros_essenciais": {
+          "--ar": "Proporção: 16:9 (cinemático/web), 9:16 (mobile), 1:1 (square), 4:5 (Instagram)",
+          "--stylize": "Flair artístico: 0-1000. Padrão 100. Menor=mais literal, Maior=mais artístico",
+          "--chaos": "Variação: 0-100. Maior=mais imprevisível e diverso",
+          "--style raw": "Remove embelezamento padrão do Midjourney, melhor para fotorrealismo",
+          "--no": "Prompt negativo: --no text, watermark, blur",
+          "--cref": "Character Reference: URL de imagem para manter consistência de personagem",
+          "--sref": "Style Reference: URL para aplicar estética de uma imagem"
+        }
+      },
+      "boas_praticas": [
+        "Midjourney v6 entende frases naturais — abandone o 'word salad' de versões antigas",
+        "Seja específico e evocativo: não 'céu bonito', mas 'dramatic sky with swirling cumulonimbus at sunset'",
+        "Use --cref para manter consistência de personagem entre imagens",
+        "Use --sref para consistência de estilo visual em um projeto",
+        "Comece simples e adicione detalhes iterativamente",
+        "Para fotorrealismo: adicione --style raw e --no cartoon illustration",
+        "Coloque parâmetros SEMPRE no final do prompt"
+      ],
+      "exemplo_estrutura": "[Sujeito específico e evocativo], [ação/cenário detalhado], [estilo artístico de referência], [iluminação cinematográfica], [detalhes atmosféricos], [paleta de cores] --ar [proporção] --stylize [valor] --chaos [valor] --no [elementos indesejados]"
+    },
+    "Stable Diffusion": {
+      "nome_completo": "Stable Diffusion XL (SDXL) / SD 3.5",
+      "categoria": "imagem",
+      "descricao": "Modelo open-source de geração de imagens. SDXL usa dois text encoders e prefere linguagem natural descritiva sobre listas de tags. Altamente customizável com LoRAs e ControlNet.",
+      "pontos_fortes": [
+        "Open-source com controle total",
+        "Alta customização via LoRAs e ControlNet",
+        "Qualidade fotorrealista com configuração correta",
+        "Prompt weighting para controle fino",
+        "Batch generation e automação",
+        "Integração com ComfyUI, Automatic1111"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito_principal", "detalhes_aparencia", "cenario", "estilo_tecnico", "iluminacao", "qualidade"],
+        "positivo": {
+          "formato": "Linguagem natural descritiva (NÃO lista de tags simples para SDXL)",
+          "exemplo_bom": "A stunning fluffy white cat with piercing blue eyes, sitting gracefully on a velvet cushion, soft morning sunlight streaming through a window, cinematic lighting, ultra-detailed fur, 85mm lens photography",
+          "exemplo_ruim": "cat, fluffy, white, blue eyes, 8k, realistic",
+          "weighting": "Use (keyword:1.2) para ênfase — sparingly, máximo 1.4 para evitar artefatos"
+        },
+        "negativo": {
+          "filosofia": "MENOS É MAIS — não use listas enormes de 50+ termos",
+          "base_negativo": "(worst quality, low quality:1.4), blurry, watermark, text, signature",
+          "adicionar_quando_necessario": "Apenas se aparecer problema específico: cartoon, anime (se quiser foto real); extra fingers, deformed (se anatomia errar)"
+        },
+        "parametros_tecnicos": {
+          "resolucao": "Sempre use SDXL buckets: 1024x1024, 1152x896, 896x1152, 1216x832",
+          "steps": "30-50 para qualidade máxima",
+          "cfg_scale": "5.0-7.0 (evite acima de 9.0 — imagem 'queimada')",
+          "sampler": "DPM++ 2M Karras é o padrão ouro"
+        }
+      },
+      "boas_praticas": [
+        "Escreva como humano, não como lista de palavras — SDXL entende frases",
+        "Coloque o mais importante NO INÍCIO do prompt",
+        "Comece o negativo simples e adicione apenas quando necessário",
+        "Use resoluções nativas SDXL para evitar composições cortadas",
+        "Use (keyword:1.2) apenas quando o modelo ignorar elemento crucial",
+        "Especifique câmera e lente para fotorrealismo (85mm f/1.8)",
+        "Para estilo específico: nomeie o estilo artístico ou artista de referência"
+      ],
+      "exemplo_estrutura": "Positive: [Descrição narrativa do sujeito com detalhes], [cenário e ambiente], [estilo artístico específico], [iluminação cinematográfica], [especificações técnicas de câmera], [qualidade: ultra-detailed, 8K]\n\nNegative: (worst quality, low quality:1.4), [elementos indesejados específicos se necessário]"
+    },
+    "Leonardo AI": {
+      "nome_completo": "Leonardo AI (Phoenix, Lucid Origin, SDXL models)",
+      "categoria": "imagem",
+      "descricao": "Plataforma de geração de imagens com múltiplos modelos. Phoenix 1.0 para aderência ao prompt, Lucid Origin para qualidade HD cinematic. Interface web com ferramentas avançadas.",
+      "pontos_fortes": [
+        "Múltiplos modelos especializados",
+        "Alta aderência ao prompt (Phoenix)",
+        "Qualidade cinematográfica HD (Lucid Origin)",
+        "Anime XL para estilo anime",
+        "Real-Time Canvas para ajustes",
+        "Inpainting para edição precisa",
+        "Renderização de texto em imagens"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito", "contexto_cenario", "estilo_tecnica", "descritores_visuais"],
+        "elementos": {
+          "sujeito": "Principal 'quem' ou 'o quê' com detalhes específicos de materiais e cores",
+          "contexto_cenario": "Onde, quando, condições de luz ambiente",
+          "estilo_tecnica": "Fotografia, arte digital, pintura a óleo, anime, etc.",
+          "descritores_visuais": "Iluminação (soft cinematic), textura, paleta de cores, humor"
+        },
+        "modelo_certo": {
+          "Phoenix 1.0": "Marketing, redes sociais, texto em imagem — alta aderência ao prompt",
+          "Lucid Origin": "Arte criativa HD, trabalho cinematográfico de alta fidelidade",
+          "Anime XL": "Estilo anime/manga específico"
+        }
+      },
+      "boas_praticas": [
+        "Especifique materiais e cores — evite generalizações como 'armchair bonito'",
+        "Para texto na imagem: use aspas duplas e mantenha curto (máx 25 chars)",
+        "Use framing positivo — minimize prompts negativos",
+        "Use Inpainting para ajustes granulares ao invés de reprompting",
+        "Explore a galeria da comunidade para ver prompts que funcionam",
+        "Selecione o modelo correto para o objetivo",
+        "Use Real-Time Canvas para iteração rápida"
+      ],
+      "exemplo_estrutura": "[Sujeito específico com materiais e cores], [contexto: localização e horário], [estilo: fotografia/arte digital/etc.], [iluminação suave e cinemática], [paleta de cores], [humor e atmosfera], [qualidade: high definition, sharp details]"
+    },
+    "Runway": {
+      "nome_completo": "Runway Gen-4 / Gen-4 Turbo",
+      "categoria": "video",
+      "descricao": "Plataforma de geração de vídeo de alta qualidade com foco em movimento cinematográfico. Gen-4 usa a imagem de entrada para definir estilo visual — o prompt foca na AÇÃO e no MOVIMENTO.",
+      "pontos_fortes": [
+        "Movimento cinematográfico fluido",
+        "Alta estabilidade temporal",
+        "Controle preciso de câmera",
+        "Image-to-Video com consistência visual",
+        "Gen-4 Turbo para iteração rápida",
+        "Fluxos de trabalho profissionais"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["acao_sujeito_principal", "movimento_camera", "acao_secundaria_ambiente", "estilo_iluminacao_se_necessario"],
+        "filosofia_central": "O prompt é uma instrução de DIRETOR — foque no que ACONTECE, não no que a cena PARECE (o input de imagem já define o visual).",
+        "elementos": {
+          "acao_sujeito": "O que o sujeito principal FAZ — verbos diretos: 'alcança', 'vira', 'caminha'",
+          "movimento_camera": "Movimento cinematográfico: 'slow push-in', 'tracking shot', 'crane up', 'pan esquerda'",
+          "acao_secundaria": "Movimento ambiental/secundário: 'vapor sobe da xícara', 'folhas ao vento'",
+          "estilo": "Apenas se não tiver imagem de input: 'golden hour', 'film grain', '35mm'"
+        },
+        "terminologia_camera": {
+          "dolly_push_in": "Para intimidade emocional ou ênfase",
+          "pull_back": "Para contexto ou revelação",
+          "tracking_shot": "Para seguir ação e criar tensão",
+          "handheld": "Para sensação natural/documental",
+          "pan": "Para revelar ambiente horizontalmente",
+          "crane_up": "Para estabelecer cena ou momento épico"
+        }
+      },
+      "boas_praticas": [
+        "Use frases AFIRMATIVAS: 'locked camera' não 'no camera movement'",
+        "Uma ação principal por vez — evite múltiplas ações simultâneas",
+        "Movimentos LENTOS e DELIBERADOS geram resultados mais estáveis",
+        "Use 'then' ou 'and' para sequenciar ações: 'pisca ENTÃO vira a cabeça'",
+        "Imagem de input de alta qualidade é o maior fator de qualidade",
+        "Comece com prompt mínimo e adicione detalhes iterativamente",
+        "Evite movimentos rápidos ou erráticos — modelo lida mal com isso"
+      ],
+      "exemplo_estrutura": "[Ação do sujeito principal com verbo específico]. [Movimento de câmera: ex: slow dolly push-in]. [Ação secundária/ambiental: ex: vapor sobe]. [Estilo/iluminação se necessário]."
+    },
+    "Sora": {
+      "nome_completo": "Sora (OpenAI)",
+      "categoria": "video",
+      "descricao": "Modelo de geração de vídeo da OpenAI. Trata prompts como 'listas de desejos directoriais' — usa terminologia cinematográfica profissional. Gera áudio nativo sincronizado.",
+      "pontos_fortes": [
+        "Geração de vídeo até 20 segundos",
+        "Áudio nativo sincronizado",
+        "Entende terminologia cinematográfica avançada",
+        "Físicas realistas de objetos",
+        "Múltiplos estilos visuais",
+        "Storyboard mode para sequências"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["cena_tempo", "sujeito_acao", "camera", "iluminacao_atmosfera", "audio"],
+        "template_shot": {
+          "cena": "Cenário, período do dia, condições climáticas, época histórica",
+          "sujeito_acao": "Quem está lá, o que fazem (dividido em beats específicos)",
+          "camera": "Tipo de plano, ângulo, lente, movimento (termos profissionais)",
+          "iluminacao": "Fonte, humor, paleta de cores, profundidade de campo",
+          "audio": "Efeitos sonoros específicos, ambient sound, diálogos (em aspas)"
+        },
+        "terminologia_camera": {
+          "planos": "Close-Up (CU), Medium Shot (MS), Wide Shot (WS), Bird's Eye View, Dutch Angle, Over-the-Shoulder",
+          "movimentos": "Slow dolly forward, handheld tracking, crane up, slow push-in, pull-back, pan",
+          "lentes": "35mm, 50mm, 85mm, grande angular, teleobjetiva",
+          "estetica": "Shot on 35mm film, 1970s film noir, cinematic documentary, shallow depth of field"
+        }
+      },
+      "boas_praticas": [
+        "Uma ação principal + um movimento de câmera + uma iluminação por clip",
+        "Use terminologia cinematográfica de estúdio — Sora entende bem",
+        "Para áudio: descreva sons ambiente específicos entre aspas para diálogos",
+        "Descreva INTERAÇÕES físicas claramente para evitar problemas de física",
+        "Sequências longas: divida em clips separados para editar depois",
+        "Ancoras de consistência: descreva roupas, acessórios, elementos de fundo iguais",
+        "Simplifique se tiver problemas: sujeito + ação + cenário como base"
+      ],
+      "exemplo_estrutura": "Cena: [local, hora do dia, condições, era].\nSujeito: [descrição do personagem/objeto e ação específica].\nCâmera: [tipo de plano], [ângulo], [lente], [movimento].\nIluminação: [fonte e qualidade da luz], [paleta de cores], [profundidade de campo].\nÁudio: [sons ambiente], [efeitos sonoros específicos]."
+    },
+    "Veo": {
+      "nome_completo": "Veo 3 / Veo 3.1 (Google DeepMind)",
+      "categoria": "video",
+      "descricao": "Modelo de geração de vídeo de alta qualidade do Google. Gera vídeos com áudio nativo sincronizado. Exige mentalidade de DIRETOR cinematográfico — estruturado, intencional, com linguagem de filmagem profissional.",
+      "pontos_fortes": [
+        "Qualidade visual cinematográfica premium",
+        "Áudio nativo gerado sincronizado",
+        "Física realista e coerência temporal",
+        "Entende linguagem de filmagem avançada",
+        "Image-to-Video com alta fidelidade",
+        "Duração de até 8 segundos por clip"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito", "acao", "cenario_contexto", "estilo_atmosfera", "linguagem_camera", "audio"],
+        "formula_core": {
+          "sujeito": "Quem ou o quê é o foco (ex: 'A weary corporate worker')",
+          "acao": "O que estão fazendo com ESPECIFICIDADE (ex: 'rubbing his temples in exhaustion')",
+          "cenario": "Onde e quando — específico (ex: 'in a cluttered 1980s office, late at night')",
+          "estilo": "Iluminação, humor, estética (ex: 'harsh fluorescent light, retro aesthetic, slightly grainy')",
+          "camera": "Tipo de plano e movimento (ex: 'medium shot, slow dolly-in')",
+          "audio": "Diálogos em aspas, SFX específicos, ambiente (ex: 'SFX: distant hum of computer fans')"
+        },
+        "comprimento_ideal": "100-150 palavras por prompt (150-300 caracteres). Muito curto = genérico. Muito longo = perda de foco.",
+        "terminologia_camera_veo": {
+          "movimentos": "dolly-in, dolly-out, tracking shot, crane shot, pan, tilt, zoom, handheld",
+          "planos": "close-up, medium shot, wide shot, extreme close-up, bird's eye, worm's eye",
+          "estetica": "shallow depth of field, film grain, cinematic 4K, 35mm film, documentary style"
+        }
+      },
+      "boas_praticas": [
+        "MENTALIDADE DE DIRETOR: o que o espectador vê e ouve, não só descreve a cena",
+        "Seja IRRAZOAVELMENTE específico — nunca use 'uma mulher tomando café' genérico",
+        "Integre áudio DELIBERADAMENTE: sons ambiente, SFX, diálogos entre aspas",
+        "Use termos de cinematografia profissional — Veo 3 foi treinado para entendê-los",
+        "Para sequências: prompts separados por cena, re-declare elementos consistentes",
+        "Prompt negativo (se suportado): 'no crowd noise', 'no subtitles', 'no shaky camera'",
+        "Decomponha cenas complexas: um clip = uma ação + um movimento de câmera"
+      ],
+      "exemplo_estrutura": "[Close-up/Medium/Wide]: [Sujeito específico com aparência detalhada] [ação específica e expressiva] em [cenário detalhado: local, época, horário]. [Estilo visual: iluminação específica, estética, grain]. [Movimento de câmera: dolly-in/tracking/etc.]. Áudio: [descrição de sons ambiente], [SFX: efeito sonoro específico], [diálogo em 'aspas simples' se houver]."
+    },
+    "Veo3": {
+      "nome_completo": "Veo 3 (Google DeepMind) — Versão mais recente",
+      "categoria": "video",
+      "descricao": "Versão mais avançada do Veo com geração de áudio nativo de alta qualidade, maior coerência temporal e suporte a múltiplos personagens. Adota abordagem de produção cinematográfica completa.",
+      "pontos_fortes": [
+        "Áudio nativo de alta qualidade gerado sincronizadamente",
+        "Suporte a múltiplos personagens com consistência",
+        "Física e movimento de câmera extremamente realistas",
+        "Coerência temporal superior entre frames",
+        "Compreensão de linguagem cinematográfica avançada",
+        "Suporte a imagem como frame inicial"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["sujeito_descricao", "acao_beats", "cenario_detalhado", "estetica_cinematografica", "camera_especifica", "audio_completo"],
+        "formula_core": {
+          "sujeito_descricao": "Descrição física detalhada do(s) personagem(ns): cabelo, roupa, expressão",
+          "acao_beats": "Ações em beats sequenciais com verbos específicos (sprint, stroll, tiptoe — não apenas 'move')",
+          "cenario_detalhado": "Local + época + horário + condições climáticas + elementos específicos de fundo",
+          "estetica": "Referência de filme/estilo visual: '35mm film aesthetic', 'cinematic, high-quality', 'documentary style'",
+          "camera": "Shot type + ângulo + lente + movimento específico de câmera",
+          "audio": "Todos os elementos sonoros: diálogos em aspas, SFX nomeados, ambiente específico"
+        },
+        "comprimento_ideal": "100-150 palavras. Cada elemento sonoro deve ser explicitamente descrito pois Veo 3 gera áudio nativo.",
+        "diferencial_veo3": "Veo 3 gera áudio NATIVO sincronizado — sempre descreva o que deve ser OUVIDO com o mesmo nível de detalhe do que é VISTO"
+      },
+      "boas_praticas": [
+        "Especifique áudio com o MESMO nível de detalhe que o visual — Veo 3 gera áudio nativo",
+        "Para diálogos: use aspas com texto exato entre aspas simples: 'Hello world'",
+        "Para SFX: nomeie com prefixo SFX: — ex: 'SFX: glass shattering'",
+        "Para múltiplos personagens: descreva cada um separadamente e use nomes ou labels",
+        "Anchors de consistência entre clips: descreva roupas, cor de cabelo, cenário iguais",
+        "Para cenas longas: divida em clips de 6-8s e edite depois",
+        "Negative prompt: 'no subtitles, no camera shake, no watermark'"
+      ],
+      "exemplo_estrutura": "[Shot type, ex: Medium shot]: [Personagem com descrição física] [ação em beats específicos: 'primeiro X, então Y'] em [cenário extremamente detalhado: local, época, horário, elementos]. Estilo: [referência cinematográfica: 35mm film, cinematic 4K, etc.]. Câmera: [movimento específico: slow dolly-in/tracking shot/etc.]. Áudio: [ambiente específico], SFX: [efeitos sonoros nomeados], Diálogo: '[texto exato entre aspas simples]'."
+    },
+    "Kling": {
+      "nome_completo": "Kling AI (Kuaishou)",
+      "categoria": "video",
+      "descricao": "Modelo de geração de vídeo da Kuaishou. Trata a IA como uma 'equipe de filmagem virtual'. Exige terminologia cinematográfica precisa e detalhes tácteis para credibilidade.",
+      "pontos_fortes": [
+        "Movimento de câmera cinematográfico preciso",
+        "Multi-Shot mode para sequências",
+        "Alta consistência de personagem com referências",
+        "Física realista com partículas",
+        "Detalhes tácteis e de textura",
+        "Prompt negativo suportado"
+      ],
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["movimento_camera_plano", "sujeito_acao", "cenario_ambiente", "iluminacao_atmosfera", "enhancements_tecnicos"],
+        "formula_cinematografica": {
+          "camera_primeiro": "COMECE com o movimento e tipo de plano — define a perspectiva do espectador",
+          "sujeito_acao": "Personagem principal + ação com verbos específicos",
+          "cenario": "Localização + hora + detalhes específicos do ambiente",
+          "iluminacao": "Fontes específicas de luz, temperatura de cor, qualidade",
+          "tecnico": "Profundidade de campo, grain de filme, tipo de lente, estilo"
+        },
+        "terminologia_camera": {
+          "movimentos": "Slow dolly push-in, tracking shot, low angle, crane up, pan, tilt, handheld sway",
+          "efeitos_taticos": "condensation on glass, steam rising, dust particles in light beams, reflections on wet asphalt"
+        }
+      },
+      "boas_praticas": [
+        "COLOQUE movimento de câmera NO INÍCIO — o modelo prioriza o começo do prompt",
+        "Use linguagem profissional: 'shallow depth of field', 'volumetric lighting', 'Tyndall effect'",
+        "Adicione DETALHES TÁCTEIS para credibilidade visual",
+        "Camera movement deve ser MOTIVADO (serve a um propósito narrativo)",
+        "Use Multi-Shot mode para sequências narrativas — até 6 shots por geração",
+        "Use referências de imagem (@image) para consistência de personagem",
+        "Negativo: 'sliding feet', 'blurry motion', 'low quality', 'extra fingers'"
+      ],
+      "exemplo_estrutura": "[Movimento de câmera e tipo de plano] de [sujeito com descrição] [ação específica] em [cenário: localização + hora + elementos]. [Iluminação específica: fonte, cor, qualidade]. [Detalhes tácteis: condensação, vapor, partículas]. [Estilo técnico: film grain, DOF, lente]."
+    },
+    "Outro": {
+      "nome_completo": "Modelo Personalizado / Não listado",
+      "categoria": "generico",
+      "descricao": "Para modelos não listados especificamente. Aplicar as melhores práticas universais de engenharia de prompt.",
+      "estrutura_prompt_ideal": {
+        "ordem_recomendada": ["role_persona", "objetivo", "contexto", "tarefa", "restricoes", "formato_saida", "qualidade"],
+        "elementos_universais": {
+          "role_persona": "Definição do papel/persona da IA",
+          "objetivo": "Objetivo claro e mensurável",
+          "contexto": "Background, público-alvo, situação",
+          "tarefa": "Descrição precisa da tarefa com etapas",
+          "restricoes": "O que não deve ser feito",
+          "formato_saida": "Como a resposta deve ser estruturada",
+          "qualidade": "Critérios de qualidade mensuráveis"
+        }
+      },
+      "boas_praticas": [
+        "Defina um papel/persona específico e relevante",
+        "Seja específico e evite ambiguidades",
+        "Estruture em seções claras",
+        "Inclua exemplos quando possível",
+        "Defina o formato de saída esperado",
+        "Adicione critérios de qualidade"
+      ]
+    }
+  },
+  "tipos_saida": {
+    "Imagem": {
+      "elementos_obrigatorios": ["sujeito_principal", "estilo_visual", "cenario", "iluminacao", "composicao_camera", "texturas", "paleta_cores", "proporcao", "qualidade_tecnica", "elementos_negativos"],
+      "dica": "Para imagem: seja extremamente visual e específico. Use termos técnicos de fotografia e arte."
+    },
+    "Vídeo": {
+      "elementos_obrigatorios": ["sujeito_acao", "movimento_camera", "cenario_atmosfera", "iluminacao", "audio_ambiente", "duracao_ritmo", "estilo_visual", "continuidade"],
+      "dica": "Para vídeo: pense como um DIRETOR. Uma ação + um movimento de câmera + uma configuração de áudio por clip."
+    },
+    "Código": {
+      "elementos_obrigatorios": ["papel_ia", "stack_tecnologica", "funcionalidades", "arquitetura", "banco_dados", "apis", "seguranca", "padroes", "deploy", "readme"],
+      "dica": "Para código: seja técnico e completo. Especifique versões, padrões e entregáveis."
+    },
+    "Texto": {
+      "elementos_obrigatorios": ["objetivo", "publico_alvo", "tom_voz", "estrutura", "tamanho", "formato"],
+      "dica": "Para texto: defina tom, público e objetivo claramente."
+    },
+    "Documento": {
+      "elementos_obrigatorios": ["estrutura_secoes", "tom", "publico_alvo", "objetivo", "formatacao", "tamanho"],
+      "dica": "Para documento: especifique a estrutura completa de seções."
+    },
+    "Planilha": {
+      "elementos_obrigatorios": ["colunas_descricao", "formulas", "organizacao", "tipos_dados", "abas", "regras_preenchimento"],
+      "dica": "Para planilha: detalhe cada coluna, fórmula e regra de validação."
+    },
+    "Apresentação": {
+      "elementos_obrigatorios": ["numero_slides", "estrutura_slide", "mensagem_principal", "design", "dados_graficos", "publico", "contexto"],
+      "dica": "Para apresentação: uma mensagem principal por slide."
+    },
+    "Post para Redes Sociais": {
+      "elementos_obrigatorios": ["plataforma", "tom_marca", "objetivo", "hashtags", "call_to_action", "tamanho_formato", "emojis"],
+      "dica": "Para redes sociais: adapte ao formato específico de cada plataforma."
+    },
+    "E-mail": {
+      "elementos_obrigatorios": ["tipo_email", "tom_formalidade", "assunto", "estrutura_corpo", "call_to_action", "assinatura", "publico"],
+      "dica": "Para e-mail: assunto impactante e CTA claro."
+    },
+    "Aula": {
+      "elementos_obrigatorios": ["nivel_publico", "objetivos_aprendizagem", "estrutura_aula", "exemplos_exercicios", "materiais", "tempo", "metodologia"],
+      "dica": "Para aula: defina objetivos mensuráveis e inclua exemplos práticos."
+    },
+    "Atividade Escolar": {
+      "elementos_obrigatorios": ["nivel_ensino", "faixa_etaria", "disciplina", "objetivos_pedagogicos", "tipo_atividade", "instrucoes", "criterios_avaliacao", "tempo"],
+      "dica": "Para atividade escolar: seja claro e adaptado ao nível do aluno."
+    },
+    "Análise de Dados": {
+      "elementos_obrigatorios": ["tipo_dados", "metricas_kpis", "metodologia", "visualizacoes", "insights", "formato_relatorio", "contexto"],
+      "dica": "Para análise: defina métricas específicas e formato do relatório."
+    },
+    "Prompt para Agente de IA": {
+      "elementos_obrigatorios": ["objetivo_escopo", "ferramentas_capacidades", "regras_comportamento", "fluxo_decisao", "tratamento_erros", "formato_acoes", "limites_restricoes"],
+      "dica": "Para agentes: defina escopo, ferramentas e regras de comportamento precisamente."
+    },
+    "Automação": {
+      "elementos_obrigatorios": ["fluxo_processo", "triggers", "acoes", "condicoes", "tratamento_erros", "integrações", "logs_monitoramento"],
+      "dica": "Para automação: mapeie todo o fluxo com triggers, ações e tratamento de exceções."
+    },
+    "Áudio": {
+      "elementos_obrigatorios": ["tipo_audio", "tom_emocao", "duracao", "publico", "roteiro_estrutura", "estilo_voz", "ambiente_sonoro"],
+      "dica": "Para áudio: descreva estilo de voz, ritmo e ambiente sonoro."
+    }
+  },
+  "niveis_detalhamento": {
+    "Simples": {
+      "descricao": "Prompt direto e objetivo",
+      "tamanho_alvo": "100-200 palavras",
+      "instrucao": "Crie um prompt simples, direto e objetivo. Máximo de 200 palavras. Sem seções complexas. Apenas o essencial para a tarefa."
+    },
+    "Médio": {
+      "descricao": "Prompt com contexto e estrutura básica",
+      "tamanho_alvo": "200-400 palavras",
+      "instrucao": "Crie um prompt de nível médio com contexto, tarefa clara e formato de saída. Entre 200 e 400 palavras. Inclua seções básicas."
+    },
+    "Avançado": {
+      "descricao": "Prompt completo com todas as seções principais",
+      "tamanho_alvo": "400-700 palavras",
+      "instrucao": "Crie um prompt avançado com persona, contexto completo, tarefa detalhada, regras, formato de saída e critérios de qualidade. Entre 400 e 700 palavras."
+    },
+    "Profissional": {
+      "descricao": "Prompt profissional com exemplos e critérios mensuráveis",
+      "tamanho_alvo": "600-1000 palavras",
+      "instrucao": "Crie um prompt profissional completo com todas as seções bem estruturadas, exemplos de alta qualidade, critérios mensuráveis de avaliação e instruções negativas. Entre 600 e 1000 palavras."
+    },
+    "Ultra detalhado": {
+      "descricao": "Prompt máximo com todos os elementos possíveis",
+      "tamanho_alvo": "1000+ palavras",
+      "instrucao": "Crie o prompt mais detalhado e completo possível. Sem limite de palavras. Use TODAS as seções pertinentes. Inclua exemplos, contra-exemplos, variações, notas técnicas e máximo de especificidade. Seja extremamente preciso e exaustivo."
+    }
+  }
+}

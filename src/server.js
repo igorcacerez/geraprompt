@@ -30,7 +30,43 @@ const openai = new OpenAI({
 // ─── Middlewares ──────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: '10kb' })); // Limita o body a 10kb por segurança
-app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ─── Headers de segurança e SEO ──────────────────────────────────
+app.use((req, res, next) => {
+  // Segurança
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Cache para assets estáticos
+  if (req.path.match(/\.(png|svg|ico|jpg|webp|woff2?|css|js)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  next();
+});
+
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+  maxAge: '1d',
+  etag: true,
+  lastModified: true,
+}));
+
+// ─── Rotas explícitas para SEO ───────────────────────────────────
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.sendFile(path.join(__dirname, '..', 'public', 'sitemap.xml'));
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.sendFile(path.join(__dirname, '..', 'public', 'robots.txt'));
+});
+
+app.get('/manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
+  res.sendFile(path.join(__dirname, '..', 'public', 'manifest.json'));
+});
 
 // ─── Rate Limit ───────────────────────────────────────────────────────────────
 const apiLimiter = rateLimit({

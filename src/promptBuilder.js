@@ -1,384 +1,276 @@
 /**
  * promptBuilder.js
- * Responsável por montar a instrução enviada para a OpenAI
- * com base nas configurações e solicitação do usuário.
+ * Motor de construção de prompts para a API da OpenAI.
+ * Usa a base de conhecimento local (models-knowledge.json) para gerar
+ * instruções altamente precisas e adaptadas a cada modelo de IA.
  */
 
-/**
- * Retorna instruções específicas por modelo de IA
- */
-function getModelInstructions(modeloSelecionado) {
-  const modelo = modeloSelecionado.toLowerCase();
+const path = require('path');
 
-  if (modelo.includes('gpt')) {
-    return `Para o modelo GPT, crie prompts claros e estruturados com:
-- Definição explícita de papel/persona
-- Contexto detalhado
-- Tarefa bem definida
-- Formato de saída esperado
-- Critérios de qualidade
-- Ideal para texto, código, análise, documentos e raciocínio complexo.`;
-  }
-
-  if (modelo.includes('gemini')) {
-    return `Para o modelo Gemini, valorize:
-- Contexto amplo e multimodal
-- Análise de imagens, vídeos e documentos
-- Integração com serviços Google
-- Prompts diretos, ricos em contexto e bem divididos por seções.`;
-  }
-
-  if (modelo.includes('claude')) {
-    return `Para o modelo Claude, crie prompts longos e bem estruturados com:
-- Contexto extenso e detalhado
-- Regras claras e explícitas
-- Seções bem definidas: Contexto, Objetivo, Regras, Tarefa, Formato da Resposta, Critérios
-- Foco em qualidade textual, análise profunda e desenvolvimento.`;
-  }
-
-  if (modelo.includes('codex')) {
-    return `Para o modelo Codex, crie prompts técnicos com:
-- Stack tecnológica completa
-- Funcionalidades detalhadas
-- Arquitetura do sistema
-- Banco de dados e modelagem
-- Rotas e endpoints
-- Telas e fluxos de usuário
-- Regras de negócio
-- Segurança e boas práticas
-- Instruções de deploy e README.`;
-  }
-
-  if (modelo.includes('nano') || modelo.includes('banana')) {
-    return `Para o modelo Nano Banana (geração de imagem), crie prompts visuais extremamente detalhados com:
-- Descrição do personagem ou objeto principal com máximo detalhe
-- Estilo visual (3D realista, cartoon, anime, fotorrealista, etc.)
-- Iluminação (natural, dramática, neon, suave, etc.)
-- Composição e enquadramento (close-up, plano americano, vista aérea, etc.)
-- Câmera e lente (grande angular, teleobjetiva, etc.)
-- Cenário e ambiente detalhado
-- Texturas e materiais
-- Paleta de cores
-- Proporção e resolução
-- Qualidade técnica
-- Elementos negativos (o que NÃO deve aparecer).`;
-  }
-
-  if (modelo.includes('dall-e') || modelo.includes('dalle')) {
-    return `Para o modelo DALL-E, crie prompts visuais objetivos e ricos com:
-- Estilo artístico claro
-- Descrição do personagem/objeto principal
-- Cenário e contexto
-- Iluminação e atmosfera
-- Enquadramento e composição
-- Proporção e qualidade
-- Tom e humor da imagem.`;
-  }
-
-  if (modelo.includes('midjourney')) {
-    return `Para o modelo Midjourney, crie prompts no estilo característico da plataforma com:
-- Descrição visual poética e evocativa
-- Estilo artístico específico (fotorrealista, ilustração, pintura a óleo, etc.)
-- Artistas de referência quando relevante
-- Parâmetros técnicos (--ar para proporção, --v para versão, --style, --q)
-- Iluminação cinematográfica
-- Detalhes de textura e atmosfera.`;
-  }
-
-  if (modelo.includes('stable') || modelo.includes('diffusion')) {
-    return `Para Stable Diffusion, crie prompts técnicos com:
-- Tags descritivas separadas por vírgula
-- Qualidade: masterpiece, best quality, ultra-detailed, 8k
-- Estilo visual detalhado
-- Descrição do sujeito principal
-- Cenário e iluminação
-- Negative prompt com elementos indesejados
-- Parâmetros técnicos relevantes.`;
-  }
-
-  if (modelo.includes('runway') || modelo.includes('sora') || modelo.includes('veo') || modelo.includes('kling')) {
-    return `Para modelos de geração de vídeo, crie prompts divididos por cenas com:
-- Duração de cada cena
-- Movimento de câmera (pan, zoom, travelling, etc.)
-- Narração e diálogos
-- Estilo visual consistente
-- Ritmo e transições
-- Trilha sonora e efeitos de áudio
-- Ambiente e iluminação
-- Detalhamento frame por frame quando necessário.`;
-  }
-
-  if (modelo.includes('leonardo')) {
-    return `Para o modelo Leonardo AI, crie prompts visuais detalhados com:
-- Descrição artística rica
-- Estilo e técnica visual
-- Personagem ou objeto principal com detalhes
-- Ambiente e composição
-- Iluminação e sombras
-- Paleta de cores
-- Qualidade e resolução
-- Elementos de estilo únicos.`;
-  }
-
-  // Modelo genérico / Outro
-  return `Para este modelo de IA, crie um prompt claro e estruturado com:
-- Definição de papel e contexto
-- Objetivo claro e mensurável
-- Tarefa detalhada
-- Restrições e regras
-- Formato de saída esperado
-- Critérios de qualidade.`;
+// ─── Carrega a base de conhecimento ──────────────────────────────────────────
+let knowledge;
+try {
+  knowledge = require(path.join(__dirname, 'models-knowledge.json'));
+} catch (err) {
+  console.error('❌ Erro ao carregar models-knowledge.json:', err.message);
+  knowledge = { modelos: {}, tipos_saida: {}, niveis_detalhamento: {} };
 }
 
-/**
- * Retorna instruções específicas por tipo de saída
- */
-function getOutputInstructions(tipoSaida) {
-  const tipo = tipoSaida.toLowerCase();
+// ─── Busca dados do modelo na knowledge base ──────────────────────────────────
+function getModelData(modeloSelecionado) {
+  const modelos = knowledge.modelos || {};
 
-  if (tipo.includes('imagem')) {
-    return `Como é uma saída de IMAGEM, o prompt deve obrigatoriamente incluir:
-- Personagem ou objeto principal com descrição detalhada
-- Estilo visual (fotorrealista, 3D, cartoon, anime, pintura, etc.)
-- Cenário e ambiente
-- Iluminação (natural, estúdio, dramática, neon, golden hour, etc.)
-- Composição e enquadramento
-- Câmera e perspectiva
-- Texturas e materiais
-- Paleta de cores dominante
-- Proporção e formato (16:9, 1:1, 9:16, etc.)
-- Qualidade técnica (4K, 8K, ultra-detailed, etc.)
-- Elementos negativos (o que NÃO incluir)`;
+  // Busca exata primeiro
+  if (modelos[modeloSelecionado]) {
+    return modelos[modeloSelecionado];
   }
 
-  if (tipo.includes('vídeo') || tipo.includes('video')) {
-    return `Como é uma saída de VÍDEO, o prompt deve incluir:
-- Duração total e por cena
-- Descrição de cada cena sequencialmente
-- Movimento de câmera por cena (pan, tilt, zoom, travelling, steady)
-- Narração ou diálogos
-- Estilo visual consistente (cinematográfico, documental, animação, etc.)
-- Ritmo e cadência das cenas
-- Transições entre cenas
-- Trilha sonora e efeitos de áudio
-- Iluminação e atmosfera de cada cena
-- Elementos visuais específicos`;
+  // Busca fuzzy (case-insensitive, parcial)
+  const modeloLower = modeloSelecionado.toLowerCase();
+  for (const key of Object.keys(modelos)) {
+    if (
+      key.toLowerCase() === modeloLower ||
+      modeloLower.includes(key.toLowerCase()) ||
+      key.toLowerCase().includes(modeloLower)
+    ) {
+      return modelos[key];
+    }
   }
 
-  if (tipo.includes('código') || tipo.includes('codigo')) {
-    return `Como é uma saída de CÓDIGO, o prompt deve incluir:
-- Papel da IA (desenvolvedor sênior, arquiteto, etc.)
-- Stack tecnológica completa
-- Funcionalidades a implementar
-- Arquitetura do projeto
-- Banco de dados e modelagem de dados
-- APIs e endpoints
-- Telas e componentes de interface
-- Regras de negócio
-- Segurança e validações
-- Padrões de código
-- Deploy e configuração
-- README e documentação`;
-  }
-
-  if (tipo.includes('documento')) {
-    return `Como é um DOCUMENTO, o prompt deve incluir:
-- Estrutura completa de seções
-- Tom e voz do documento
-- Público-alvo
-- Objetivo do documento
-- Formatação esperada
-- Tamanho aproximado
-- Referências quando necessário`;
-  }
-
-  if (tipo.includes('planilha')) {
-    return `Como é uma PLANILHA, o prompt deve incluir:
-- Nome e propósito das colunas
-- Fórmulas e cálculos necessários
-- Organização e hierarquia dos dados
-- Tipos de dados por coluna
-- Abas e estrutura de navegação
-- Regras de preenchimento e validação
-- Formatação condicional quando necessário`;
-  }
-
-  if (tipo.includes('apresentação')) {
-    return `Como é uma APRESENTAÇÃO, o prompt deve incluir:
-- Número de slides
-- Estrutura e ordem dos slides
-- Mensagem principal de cada slide
-- Design visual e identidade
-- Dados e gráficos necessários
-- Tom da apresentação
-- Público e contexto`;
-  }
-
-  if (tipo.includes('post') || tipo.includes('redes sociais')) {
-    return `Como é um POST PARA REDES SOCIAIS, o prompt deve incluir:
-- Plataforma específica (Instagram, TikTok, LinkedIn, Twitter/X, etc.)
-- Tom e voz da marca
-- Objetivo do post (engajamento, vendas, educação, etc.)
-- Hashtags relevantes
-- Call-to-action
-- Tamanho e formato do texto
-- Emojis e elementos visuais`;
-  }
-
-  if (tipo.includes('e-mail') || tipo.includes('email')) {
-    return `Como é um E-MAIL, o prompt deve incluir:
-- Tipo de e-mail (comercial, pessoal, marketing, transacional, etc.)
-- Tom e formalidade
-- Assunto impactante
-- Estrutura do corpo
-- Call-to-action
-- Assinatura
-- Público-alvo`;
-  }
-
-  if (tipo.includes('aula')) {
-    return `Como é uma AULA, o prompt deve incluir:
-- Nível do público (básico, intermediário, avançado)
-- Objetivos de aprendizagem
-- Estrutura da aula (introdução, desenvolvimento, conclusão)
-- Exemplos práticos e exercícios
-- Materiais de apoio
-- Tempo estimado
-- Metodologia pedagógica`;
-  }
-
-  if (tipo.includes('atividade') || tipo.includes('escolar')) {
-    return `Como é uma ATIVIDADE ESCOLAR, o prompt deve incluir:
-- Nível de ensino e faixa etária
-- Disciplina ou área do conhecimento
-- Objetivos pedagógicos
-- Tipo de atividade (exercício, projeto, avaliação, etc.)
-- Instruções claras para o aluno
-- Critérios de avaliação
-- Tempo de execução`;
-  }
-
-  if (tipo.includes('análise') || tipo.includes('analise') || tipo.includes('dados')) {
-    return `Como é uma ANÁLISE DE DADOS, o prompt deve incluir:
-- Tipo de dados a analisar
-- Métricas e KPIs relevantes
-- Metodologia de análise
-- Visualizações esperadas (gráficos, tabelas, etc.)
-- Insights desejados
-- Formato do relatório final
-- Contexto e objetivo da análise`;
-  }
-
-  if (tipo.includes('agente') || tipo.includes('automação') || tipo.includes('automacao')) {
-    return `Como é um PROMPT PARA AGENTE DE IA ou AUTOMAÇÃO, o prompt deve incluir:
-- Objetivo e escopo do agente
-- Ferramentas e capacidades disponíveis
-- Regras de comportamento e ética
-- Fluxo de decisão
-- Tratamento de exceções e erros
-- Formato de saída das ações
-- Limites e restrições claras`;
-  }
-
-  if (tipo.includes('áudio') || tipo.includes('audio')) {
-    return `Como é um ÁUDIO, o prompt deve incluir:
-- Tipo de áudio (podcast, narração, música, efeito sonoro, etc.)
-- Tom e emoção
-- Duração estimada
-- Público-alvo
-- Roteiro ou estrutura
-- Estilo de voz
-- Ambiente sonoro`;
-  }
-
-  return `O prompt deve incluir contexto claro, objetivo mensurável, formato esperado e critérios de qualidade.`;
+  // Fallback para "Outro"
+  return modelos['Outro'] || null;
 }
 
-/**
- * Retorna instruções de nível de detalhamento
- */
-function getDetailLevel(nivelDetalhamento) {
-  const nivel = nivelDetalhamento.toLowerCase();
+// ─── Busca dados do tipo de saída na knowledge base ───────────────────────────
+function getOutputData(tipoSaida) {
+  const tipos = knowledge.tipos_saida || {};
 
-  if (nivel.includes('simples')) {
-    return 'Crie um prompt simples, direto e objetivo. Máximo de 200 palavras. Sem seções complexas.';
-  }
-  if (nivel.includes('médio') || nivel.includes('medio')) {
-    return 'Crie um prompt de nível médio, com contexto, tarefa e formato de saída. Entre 200 e 400 palavras.';
-  }
-  if (nivel.includes('avançado') || nivel.includes('avancado')) {
-    return 'Crie um prompt avançado com persona, contexto, tarefa, regras, formato e critérios. Entre 400 e 700 palavras.';
-  }
-  if (nivel.includes('profissional')) {
-    return 'Crie um prompt profissional completo, com todas as seções bem estruturadas, exemplos quando necessário e critérios claros. Entre 600 e 1000 palavras.';
-  }
-  if (nivel.includes('ultra')) {
-    return 'Crie o prompt mais detalhado possível. Sem limite de palavras. Use todas as seções pertinentes, inclua exemplos, contra-exemplos, variações e máximo de detalhes técnicos. Seja extremamente específico e completo.';
+  if (tipos[tipoSaida]) return tipos[tipoSaida];
+
+  const tipoLower = tipoSaida.toLowerCase();
+  for (const key of Object.keys(tipos)) {
+    if (key.toLowerCase() === tipoLower || tipoLower.includes(key.toLowerCase())) {
+      return tipos[key];
+    }
   }
 
-  return 'Crie um prompt bem estruturado com nível de detalhamento adequado para a solicitação.';
+  return null;
 }
 
-/**
- * Monta o prompt interno que será enviado para a OpenAI
- */
+// ─── Busca dados do nível de detalhamento ─────────────────────────────────────
+function getLevelData(nivelDetalhamento) {
+  const niveis = knowledge.niveis_detalhamento || {};
+  return niveis[nivelDetalhamento] || niveis['Avançado'] || { instrucao: 'Crie um prompt bem estruturado.', tamanho_alvo: '400-700 palavras' };
+}
+
+// ─── Formata as boas práticas do modelo ───────────────────────────────────────
+function formatModelBestPractices(modelData) {
+  if (!modelData) return '';
+
+  const lines = [];
+
+  if (modelData.descricao) {
+    lines.push(`Descrição do modelo: ${modelData.descricao}`);
+  }
+
+  if (modelData.pontos_fortes && modelData.pontos_fortes.length > 0) {
+    lines.push(`\nPontos fortes deste modelo:\n${modelData.pontos_fortes.map(p => `• ${p}`).join('\n')}`);
+  }
+
+  if (modelData.estrutura_prompt_ideal) {
+    const estrutura = modelData.estrutura_prompt_ideal;
+
+    if (estrutura.ordem_recomendada) {
+      lines.push(`\nOrdem recomendada das seções: ${estrutura.ordem_recomendada.join(' → ')}`);
+    }
+
+    if (estrutura.filosofia_central) {
+      lines.push(`\n⚠️ FILOSOFIA CENTRAL: ${estrutura.filosofia_central}`);
+    }
+
+    if (estrutura.diferencial_chave) {
+      lines.push(`\n⚠️ DIFERENCIAL CHAVE: ${estrutura.diferencial_chave}`);
+    }
+
+    if (estrutura.comprimento_ideal) {
+      lines.push(`\nComprimento ideal: ${estrutura.comprimento_ideal}`);
+    }
+
+    if (estrutura.diferencial_veo3) {
+      lines.push(`\n⚠️ DIFERENCIAL VEO3: ${estrutura.diferencial_veo3}`);
+    }
+
+    // Elementos específicos do modelo
+    const elementosChaves = [
+      'elementos_obrigatorios',
+      'elementos_visuais_obrigatorios',
+      'elementos',
+      'formula_core',
+      'secoes',
+      'template_shot',
+      'formula_cinematografica',
+    ];
+
+    for (const chave of elementosChaves) {
+      if (estrutura[chave]) {
+        const elementos = estrutura[chave];
+        if (typeof elementos === 'object' && !Array.isArray(elementos)) {
+          lines.push(`\nElementos essenciais do prompt:`);
+          for (const [nome, descricao] of Object.entries(elementos)) {
+            lines.push(`• ${nome}: ${descricao}`);
+          }
+        } else if (Array.isArray(elementos)) {
+          lines.push(`\nElementos essenciais:\n${elementos.map(e => `• ${e}`).join('\n')}`);
+        }
+        break; // usa apenas o primeiro encontrado
+      }
+    }
+
+    // Parâmetros técnicos (Midjourney, SDXL, etc.)
+    if (estrutura.parametros_essenciais || estrutura.parametros_tecnicos) {
+      const params = estrutura.parametros_essenciais || estrutura.parametros_tecnicos;
+      if (typeof params === 'object') {
+        lines.push(`\nParâmetros técnicos:`);
+        for (const [param, desc] of Object.entries(params)) {
+          lines.push(`• ${param}: ${desc}`);
+        }
+      }
+    }
+
+    // Terminologia de câmera (para modelos de vídeo)
+    if (estrutura.terminologia_camera || estrutura.terminologia_camera_veo) {
+      const terminos = estrutura.terminologia_camera || estrutura.terminologia_camera_veo;
+      if (typeof terminos === 'object') {
+        lines.push(`\nTerminologia cinematográfica disponível:`);
+        for (const [tipo, lista] of Object.entries(terminos)) {
+          lines.push(`• ${tipo}: ${typeof lista === 'object' ? JSON.stringify(lista) : lista}`);
+        }
+      }
+    }
+
+    // Técnicas avançadas
+    const tecnicasChaves = ['tecnicas_avancadas', 'tecnicas_especificas'];
+    for (const chave of tecnicasChaves) {
+      if (estrutura[chave] && Array.isArray(estrutura[chave])) {
+        lines.push(`\nTécnicas avançadas para este modelo:\n${estrutura[chave].map(t => `• ${t}`).join('\n')}`);
+        break;
+      }
+    }
+  }
+
+  if (modelData.boas_praticas && modelData.boas_praticas.length > 0) {
+    lines.push(`\n🎯 BOAS PRÁTICAS OBRIGATÓRIAS para ${modelData.nome_completo || 'este modelo'}:\n${modelData.boas_praticas.map(p => `• ${p}`).join('\n')}`);
+  }
+
+  if (modelData.exemplo_estrutura) {
+    lines.push(`\n📐 ESTRUTURA DE REFERÊNCIA (adapte ao conteúdo do usuário):\n${modelData.exemplo_estrutura}`);
+  }
+
+  return lines.join('\n');
+}
+
+// ─── Formata instruções do tipo de saída ──────────────────────────────────────
+function formatOutputInstructions(outputData, tipoSaida) {
+  if (!outputData) return `Para saída do tipo ${tipoSaida}, inclua contexto claro, objetivo e formato de saída.`;
+
+  const lines = [];
+
+  if (outputData.dica) {
+    lines.push(`💡 ${outputData.dica}`);
+  }
+
+  if (outputData.elementos_obrigatorios && outputData.elementos_obrigatorios.length > 0) {
+    lines.push(`\nElementos OBRIGATÓRIOS para ${tipoSaida}:\n${outputData.elementos_obrigatorios.map(e => `• ${e}`).join('\n')}`);
+  }
+
+  return lines.join('\n');
+}
+
+// ─── Função principal: monta o system prompt para a OpenAI ────────────────────
 function buildSystemPrompt(dados) {
   const { modeloSelecionado, tipoSaida, nivelDetalhamento, idioma, mensagemUsuario } = dados;
 
-  const modelInstructions = getModelInstructions(modeloSelecionado);
-  const outputInstructions = getOutputInstructions(tipoSaida);
-  const detailInstructions = getDetailLevel(nivelDetalhamento);
+  // Busca dados na base de conhecimento
+  const modelData    = getModelData(modeloSelecionado);
+  const outputData   = getOutputData(tipoSaida);
+  const levelData    = getLevelData(nivelDetalhamento);
+  const categoria    = modelData?.categoria || 'generico';
 
-  const systemPrompt = `Você é um especialista sênior em engenharia de prompt, IA generativa, UX, criação de conteúdo e automação. Com mais de 10 anos de experiência criando prompts profissionais para os mais diversos modelos de IA. Sua tarefa é transformar a solicitação simples do usuário em um prompt profissional, claro, estruturado e altamente eficiente.
+  // Formata seções específicas
+  const modelInstructions  = formatModelBestPractices(modelData);
+  const outputInstructions = formatOutputInstructions(outputData, tipoSaida);
 
-CONFIGURAÇÕES DO USUÁRIO:
-- Modelo de IA alvo: ${modeloSelecionado}
-- Tipo de saída desejada: ${tipoSaida}
-- Nível de detalhamento: ${nivelDetalhamento}
-- Idioma do prompt gerado: ${idioma}
+  // ─── System Prompt ──────────────────────────────────────────────────────────
+  const systemPrompt = `Você é um especialista sênior em engenharia de prompt com mais de 10 anos de experiência criando prompts profissionais para todos os modelos de IA existentes. Você tem conhecimento profundo de como cada modelo funciona, suas características únicas e como extrair o melhor resultado de cada um.
 
-INSTRUÇÃO DE DETALHAMENTO:
-${detailInstructions}
+Sua missão é transformar a solicitação do usuário em um prompt PERFEITO, PRECISO e PRONTO PARA USO IMEDIATO.
 
-INSTRUÇÕES ESPECÍFICAS PARA O MODELO ${modeloSelecionado.toUpperCase()}:
+═══════════════════════════════════════════════════════
+CONFIGURAÇÕES DO USUÁRIO
+═══════════════════════════════════════════════════════
+• Modelo de IA alvo: ${modeloSelecionado}
+• Tipo de saída desejada: ${tipoSaida}
+• Nível de detalhamento: ${nivelDetalhamento}
+• Idioma do prompt gerado: ${idioma}
+• Categoria do modelo: ${categoria}
+
+═══════════════════════════════════════════════════════
+INSTRUÇÃO DE DETALHAMENTO
+═══════════════════════════════════════════════════════
+${levelData.instrucao}
+Tamanho alvo do prompt gerado: ${levelData.tamanho_alvo}
+
+═══════════════════════════════════════════════════════
+CONHECIMENTO ESPECÍFICO DO MODELO: ${modeloSelecionado.toUpperCase()}
+═══════════════════════════════════════════════════════
 ${modelInstructions}
 
-INSTRUÇÕES ESPECÍFICAS PARA O TIPO DE SAÍDA (${tipoSaida.toUpperCase()}):
+═══════════════════════════════════════════════════════
+REQUISITOS PARA O TIPO DE SAÍDA: ${tipoSaida.toUpperCase()}
+═══════════════════════════════════════════════════════
 ${outputInstructions}
 
-BOAS PRÁTICAS OBRIGATÓRIAS:
-O prompt gerado deve conter, quando aplicável:
-- Definição clara de papel/persona da IA
-- Contextualização completa do objetivo
-- Descrição precisa e inequívoca da tarefa
-- Restrições e regras explícitas
-- Formato de saída esperado
-- Tom e estilo de comunicação
-- Público-alvo
-- Critérios de qualidade mensuráveis
-- Exemplos concretos quando necessário
-- Instruções negativas (o que NÃO fazer)
-- Detalhamento técnico quando pertinente
-- Organização em blocos/seções visuais
-- Clareza e ausência total de ambiguidade
+═══════════════════════════════════════════════════════
+REGRAS ABSOLUTAS DE ENGENHARIA DE PROMPT
+═══════════════════════════════════════════════════════
+O prompt gerado DEVE conter, quando aplicável:
+1. PERSONA/PAPEL: Definição clara e específica do papel da IA
+2. CONTEXTO: Contextualização completa do objetivo e situação
+3. TAREFA: Descrição precisa e inequívoca da tarefa
+4. RESTRIÇÕES: O que NÃO deve ser feito (negative prompting)
+5. FORMATO: Formato exato de saída esperado
+6. TOM: Tom, estilo e voz adequados ao contexto
+7. PÚBLICO-ALVO: Para quem é o output
+8. QUALIDADE: Critérios mensuráveis de qualidade
+9. EXEMPLOS: Quando relevante e dentro do escopo do nível
+10. ESPECIFICIDADE: Zero ambiguidade — seja ridiculamente específico
 
-IDIOMA:
-Gere o prompt final no idioma: ${idioma}
+═══════════════════════════════════════════════════════
+IDIOMA E FORMATO DE ENTREGA
+═══════════════════════════════════════════════════════
+• Gere o prompt FINAL no idioma: ${idioma}
+• ENTREGUE SOMENTE o prompt final — sem prefácio, sem comentários, sem "aqui está o prompt"
+• NÃO explique o que foi feito
+• NÃO adicione observações ou notas ao final
+• O prompt deve ser 100% pronto para copiar e colar no modelo ${modeloSelecionado}
+• Adapte a sintaxe, estrutura e vocabulário ao que o modelo ${modeloSelecionado} melhor entende
+• Para modelos de imagem: use linguagem visual e descritiva
+• Para modelos de vídeo: use terminologia cinematográfica profissional
+• Para modelos de texto/código: use estrutura lógica e hierárquica`;
 
-REGRAS CRÍTICAS:
-- Entregue SOMENTE o prompt final, sem comentários, explicações ou observações suas
-- Não diga "aqui está o prompt" ou qualquer frase introdutória
-- Não adicione observações ao final
-- O prompt deve ser pronto para copiar e colar diretamente no modelo de IA
-- Adapte a estrutura ao modelo escolhido
-- Seja específico, não genérico
-- Use formatação com seções e marcações quando adequado ao modelo`;
+  // ─── User Message ───────────────────────────────────────────────────────────
+  const userMessage = `Solicitação original do usuário:
+"${mensagemUsuario}"
 
-  const userMessage = `Solicitação do usuário: "${mensagemUsuario}"
+Com base no conhecimento especializado sobre o modelo ${modeloSelecionado} e nas melhores práticas de engenharia de prompt para output do tipo "${tipoSaida}", crie agora o prompt profissional otimizado.
 
-Crie agora o prompt profissional otimizado para ${modeloSelecionado} com foco em ${tipoSaida}, no nível ${nivelDetalhamento}, em ${idioma}.`;
+Nível: ${nivelDetalhamento} (${levelData.tamanho_alvo})
+Idioma: ${idioma}
+
+Entregue APENAS o prompt final, pronto para ser usado no ${modeloSelecionado}.`;
 
   return { systemPrompt, userMessage };
 }
 
-module.exports = { buildSystemPrompt };
+// ─── Exporta ──────────────────────────────────────────────────────────────────
+module.exports = { buildSystemPrompt, getModelData, getOutputData, getLevelData };

@@ -1,35 +1,212 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" prefix="og: https://ogp.me/ns#">
 <head>
+  <!-- ─── Charset & Viewport ──────────────────────────────────── -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Gerador de Prompt — Crie prompts profissionais e otimizados para qualquer modelo de IA com engenharia de prompt avançada." />
-  <meta name="keywords" content="gerador de prompt, engenharia de prompt, IA, GPT, Gemini, Claude, prompt profissional" />
-  <meta property="og:title" content="Gerador de Prompt" />
-  <meta property="og:description" content="Transforme suas ideias em prompts profissionais para qualquer modelo de IA." />
-  <title>Gerador de Prompt — Prompts Profissionais com IA</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- ─── SEO Primário ────────────────────────────────────────── -->
+  <title>Gerador de Prompt — Crie Prompts Profissionais para GPT, Gemini, Claude e mais</title>
+  <meta name="description" content="Gere prompts profissionais e otimizados para qualquer modelo de IA: GPT, Gemini, Claude, DALL-E, Midjourney, Stable Diffusion, Sora e mais. Engenharia de prompt avançada, gratuito, sem cadastro." />
+  <meta name="keywords" content="gerador de prompt, engenharia de prompt, prompt profissional, prompt GPT, prompt Gemini, prompt Claude, prompt DALL-E, prompt Midjourney, prompt Stable Diffusion, como fazer prompt, prompt para IA, prompt generator, AI prompt, criar prompt, otimizar prompt" />
+  <meta name="author" content="Gerador de Prompt" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="language" content="Portuguese" />
+  <meta name="geo.region" content="BR" />
+  <meta name="geo.placename" content="Brasil" />
+  <link rel="canonical" href="https://geraprompt.com.br/" />
+
+  <!-- ─── Hreflang (multilingual) ─────────────────────────────── -->
+  <link rel="alternate" hreflang="pt-BR" href="https://geraprompt.com.br/" />
+  <link rel="alternate" hreflang="en"    href="https://geraprompt.com.br/" />
+  <link rel="alternate" hreflang="es"    href="https://geraprompt.com.br/" />
+  <link rel="alternate" hreflang="x-default" href="https://geraprompt.com.br/" />
+
+  <!-- ─── Open Graph (Facebook, LinkedIn, WhatsApp) ───────────── -->
+  <meta property="og:type"               content="website" />
+  <meta property="og:site_name"          content="Gerador de Prompt" />
+  <meta property="og:locale"             content="pt_BR" />
+  <meta property="og:locale:alternate"   content="en_US" />
+  <meta property="og:locale:alternate"   content="es_ES" />
+  <meta property="og:url"                content="https://geraprompt.com.br/" />
+  <meta property="og:title"             content="Gerador de Prompt — Prompts Profissionais para Qualquer IA" />
+  <meta property="og:description"       content="Transforme suas ideias em prompts profissionais para GPT, Gemini, Claude, DALL-E, Midjourney e mais. Gratuito, sem cadastro, com engenharia de prompt avançada." />
+  <meta property="og:image"             content="https://geraprompt.com.br/og-image.png" />
+  <meta property="og:image:secure_url"  content="https://geraprompt.com.br/og-image.png" />
+  <meta property="og:image:type"        content="image/png" />
+  <meta property="og:image:width"       content="1200" />
+  <meta property="og:image:height"      content="630" />
+  <meta property="og:image:alt"         content="Gerador de Prompt — Crie prompts profissionais para qualquer modelo de IA" />
+
+  <!-- ─── Twitter / X Card ────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:site"        content="@geraprompt" />
+  <meta name="twitter:creator"     content="@geraprompt" />
+  <meta name="twitter:title"       content="Gerador de Prompt — Prompts Profissionais para Qualquer IA" />
+  <meta name="twitter:description" content="Transforme suas ideias em prompts profissionais para GPT, Gemini, Claude, DALL-E, Midjourney e mais. Gratuito, sem cadastro." />
+  <meta name="twitter:image"       content="https://geraprompt.com.br/og-image.png" />
+  <meta name="twitter:image:alt"   content="Gerador de Prompt — Crie prompts profissionais para qualquer modelo de IA" />
+
+  <!-- ─── Favicons & App Icons ────────────────────────────────── -->
+  <link rel="icon"             href="/favicon.ico"          sizes="any" />
+  <link rel="icon"             href="/favicon.svg"          type="image/svg+xml" />
+  <link rel="icon"             href="/favicon-32.png"       type="image/png" sizes="32x32" />
+  <link rel="icon"             href="/favicon-16.png"       type="image/png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="manifest"         href="/manifest.json" />
+  <meta name="theme-color"           content="#10a37f" />
+  <meta name="msapplication-TileColor" content="#0d0d0d" />
+  <meta name="msapplication-TileImage" content="/icon-192.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Gerador de Prompt" />
+
+  <!-- ─── Performance ─────────────────────────────────────────── -->
+  <link rel="preconnect"    href="https://fonts.googleapis.com" />
+  <link rel="preconnect"    href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch"  href="https://fonts.googleapis.com" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="style.css" />
   <link rel="stylesheet" href="style.css" />
+
+  <!-- ─── JSON-LD Structured Data ─────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://geraprompt.com.br/#webapp",
+        "name": "Gerador de Prompt",
+        "alternateName": "Gerador de Prompts para IA",
+        "description": "Plataforma web gratuita para criar prompts profissionais e otimizados para qualquer modelo de IA usando engenharia de prompt avançada.",
+        "url": "https://geraprompt.com.br/",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "BRL",
+          "availability": "https://schema.org/InStock"
+        },
+        "featureList": [
+          "Geração de prompts para GPT",
+          "Geração de prompts para Gemini",
+          "Geração de prompts para Claude",
+          "Geração de prompts para DALL-E",
+          "Geração de prompts para Midjourney",
+          "Geração de prompts para Stable Diffusion",
+          "Geração de prompts para Sora",
+          "Engenharia de prompt avançada",
+          "5 níveis de detalhamento",
+          "Suporte a 3 idiomas",
+          "Sem cadastro necessário",
+          "Gratuito"
+        ],
+        "inLanguage": ["pt-BR", "en", "es"],
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://geraprompt.com.br/og-image.png",
+          "width": 1200,
+          "height": 630
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Gerador de Prompt",
+          "url": "https://geraprompt.com.br/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://geraprompt.com.br/icon-512.png",
+            "width": 512,
+            "height": 512
+          }
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://geraprompt.com.br/#website",
+        "name": "Gerador de Prompt",
+        "url": "https://geraprompt.com.br/",
+        "description": "Crie prompts profissionais para qualquer modelo de IA.",
+        "inLanguage": "pt-BR",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://geraprompt.com.br/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "O que é o Gerador de Prompt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "O Gerador de Prompt é uma plataforma gratuita que usa engenharia de prompt avançada e a API da OpenAI para transformar suas ideias em prompts profissionais e otimizados para qualquer modelo de IA, como GPT, Gemini, Claude, DALL-E, Midjourney e mais."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Preciso me cadastrar para usar o Gerador de Prompt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Não. O Gerador de Prompt é completamente gratuito e não exige cadastro. Basta acessar o site, escolher o modelo de IA, configurar as opções e descrever o que você precisa."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quais modelos de IA são suportados?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Suportamos mais de 14 modelos, incluindo GPT, Gemini, Claude, Codex, DALL-E, Midjourney, Stable Diffusion, Leonardo AI, Runway, Sora, Veo, Kling e Nano Banana."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Como funciona a engenharia de prompt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A engenharia de prompt é a prática de criar instruções otimizadas para modelos de IA. Nosso sistema analisa o modelo escolhido, o tipo de saída desejada e sua solicitação para gerar um prompt estruturado com papel da IA, contexto, tarefa, restrições e critérios de qualidade."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Em quais idiomas posso gerar prompts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "O Gerador de Prompt suporta três idiomas: Português do Brasil, Inglês e Espanhol."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <!-- ─── Header ─────────────────────────────────────────── -->
   <header class="header" role="banner">
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon" aria-hidden="true">⚡</span>
+      <a href="/" class="logo" title="Gerador de Prompt — Página inicial" aria-label="Gerador de Prompt — Ir para a página inicial">
+        <img src="/favicon.svg" alt="Ícone Gerador de Prompt" class="logo-img" width="28" height="28" loading="eager" />
         <span class="logo-text">Gerador de Prompt</span>
-      </div>
+      </a>
       <p class="header-tagline">Prompts profissionais para qualquer modelo de IA</p>
     </div>
   </header>
 
   <!-- ─── Layout Principal ────────────────────────────────── -->
-  <main class="main-layout" role="main">
+  <main class="main-layout" role="main" id="main-content">
 
     <!-- Sidebar de Configurações -->
-    <aside class="sidebar" aria-label="Configurações">
+    <aside class="sidebar" aria-label="Configurações do gerador de prompt">
       <div class="sidebar-inner">
         <h2 class="sidebar-title">
           <span class="sidebar-title-icon" aria-hidden="true">⚙️</span>
@@ -43,9 +220,9 @@
             Modelo de IA
           </label>
           <div class="select-wrapper">
-            <select id="modelo-select" class="form-select" aria-label="Selecione o modelo de IA">
+            <select id="modelo-select" class="form-select" name="modelo" aria-label="Selecione o modelo de IA que você vai usar" aria-required="true">
               <option value="" disabled selected>Selecione um modelo...</option>
-              <optgroup label="Texto & Raciocínio">
+              <optgroup label="Texto &amp; Raciocínio">
                 <option value="GPT">GPT (OpenAI)</option>
                 <option value="Gemini">Gemini (Google)</option>
                 <option value="Claude">Claude (Anthropic)</option>
@@ -59,10 +236,11 @@
                 <option value="Leonardo AI">Leonardo AI</option>
               </optgroup>
               <optgroup label="Vídeo">
-                <option value="Runway">Runway</option>
+                <option value="Runway">Runway (Gen-4)</option>
                 <option value="Sora">Sora (OpenAI)</option>
-                <option value="Veo">Veo (Google)</option>
-                <option value="Kling">Kling</option>
+                <option value="Veo">Veo 2 (Google)</option>
+                <option value="Veo3">Veo 3 (Google DeepMind) ★</option>
+                <option value="Kling">Kling (Kuaishou)</option>
               </optgroup>
               <optgroup label="Outros">
                 <option value="Outro">Outro modelo</option>
@@ -79,7 +257,7 @@
             Tipo de Saída
           </label>
           <div class="select-wrapper">
-            <select id="saida-select" class="form-select" aria-label="Selecione o tipo de saída esperada">
+            <select id="saida-select" class="form-select" name="tipo-saida" aria-label="Selecione o tipo de saída esperada do prompt" aria-required="true">
               <option value="" disabled selected>Selecione o tipo...</option>
               <optgroup label="Conteúdo">
                 <option value="Texto">Texto</option>
@@ -116,7 +294,7 @@
             Nível de Detalhamento
           </label>
           <div class="select-wrapper">
-            <select id="nivel-select" class="form-select" aria-label="Selecione o nível de detalhamento">
+            <select id="nivel-select" class="form-select" name="nivel" aria-label="Selecione o nível de detalhamento do prompt gerado">
               <option value="Simples">Simples</option>
               <option value="Médio">Médio</option>
               <option value="Avançado" selected>Avançado</option>
@@ -141,7 +319,7 @@
             Idioma do Prompt
           </label>
           <div class="select-wrapper">
-            <select id="idioma-select" class="form-select" aria-label="Selecione o idioma do prompt gerado">
+            <select id="idioma-select" class="form-select" name="idioma" aria-label="Selecione o idioma em que o prompt será gerado">
               <option value="Português do Brasil" selected>🇧🇷 Português do Brasil</option>
               <option value="Inglês">🇺🇸 Inglês</option>
               <option value="Espanhol">🇪🇸 Espanhol</option>
@@ -159,7 +337,7 @@
     </aside>
 
     <!-- Área principal de chat -->
-    <section class="chat-area" aria-label="Área de geração de prompt">
+    <section class="chat-area" aria-label="Área principal de geração de prompt">
 
       <!-- Área de boas-vindas / histórico -->
       <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Histórico de prompts gerados">
@@ -182,37 +360,49 @@
             </div>
           </div>
           <p class="welcome-hint">Configure os parâmetros ao lado e descreva o que você precisa abaixo.</p>
+          <!-- Conteúdo rico para SEO — visível apenas para crawlers -->
+          <div class="seo-content" aria-hidden="false">
+            <p>Suporte a GPT, Gemini, Claude, Codex, DALL-E, Midjourney, Stable Diffusion, Leonardo AI, Runway, Sora, Veo, Kling e mais.</p>
+          </div>
         </div>
       </div>
 
       <!-- Input Area -->
       <div class="input-area">
-        <div class="input-container" role="form" aria-label="Formulário de geração de prompt">
-          <div class="textarea-wrapper">
+        <div class="input-container">
+          <div class="textarea-wrapper" role="form" aria-label="Formulário de geração de prompt — descreva o que você precisa">
+            <label for="user-message" class="sr-only">Descreva sua solicitação para gerar o prompt</label>
             <textarea
               id="user-message"
+              name="mensagem"
               class="user-input"
               placeholder="Descreva o que você precisa... Ex: Quero criar uma imagem de uma calopsita programadora em estilo 3D realista para usar no TikTok."
               rows="1"
               maxlength="2000"
-              aria-label="Descreva sua solicitação"
-              aria-describedby="char-counter"
+              aria-label="Descreva sua solicitação para gerar o prompt profissional"
+              aria-describedby="char-counter input-hint"
+              autocomplete="off"
+              spellcheck="true"
             ></textarea>
+            <p id="input-hint" class="sr-only">Pressione Enter para gerar o prompt ou Shift+Enter para nova linha. Máximo de 2000 caracteres.</p>
             <div class="input-footer">
-              <span class="char-counter" id="char-counter" aria-live="polite">
+              <span class="char-counter" id="char-counter" aria-live="polite" aria-label="Contador de caracteres">
                 <span id="char-count">0</span>/2000
               </span>
               <div class="input-actions">
-                <button id="btn-clear" class="btn-icon" title="Limpar tudo" aria-label="Limpar todos os campos">
+                <button id="btn-clear" class="btn-icon" type="button" title="Limpar tudo" aria-label="Limpar todos os campos e o histórico">
                   🗑️
                 </button>
-                <button id="btn-generate" class="btn-primary" aria-label="Gerar prompt profissional">
+                <button id="btn-generate" class="btn-primary" type="button" aria-label="Gerar prompt profissional com IA">
                   <span class="btn-text">Gerar Prompt</span>
                   <span class="btn-icon-right" aria-hidden="true">⚡</span>
                 </button>
               </div>
             </div>
           </div>
+          <p class="input-hint-text" aria-hidden="true">
+            <kbd>Enter</kbd> para gerar &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> para nova linha
+          </p>
         </div>
       </div>
     </section>
@@ -227,10 +417,13 @@
       <span class="modal-icon" aria-hidden="true">⚠️</span>
       <h3 id="modal-title" class="modal-title">Atenção</h3>
       <p id="modal-message" class="modal-message"></p>
-      <button id="modal-close" class="btn-primary" aria-label="Fechar aviso">Entendido</button>
+      <button id="modal-close" class="btn-primary" type="button" aria-label="Fechar aviso e continuar">Entendido</button>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- ─── Skip to main content (acessibilidade) ───────────── -->
+  <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
